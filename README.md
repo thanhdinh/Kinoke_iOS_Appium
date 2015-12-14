@@ -10,7 +10,7 @@ To compile and run all tests, run:
 
 To run a single test, run:
 
-    mvn -Dtest=appium.tutorial.AutomatingASimpleActionTest test
+    mvn -Dtest=wav.ios.test.AutomatingKinokeiOSTest test
     
 To run on sauce:
 

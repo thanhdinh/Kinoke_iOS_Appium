@@ -18,7 +18,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	
 	static int RANDOM_NUM = (int)(Math.random()*9999);
 	
-    @org.junit.Test
+    //@org.junit.Test
     public void loadSignIn_UsingMyEmail() throws Exception {
         System.out.println("\nCalled loadSignIn_UsingMyEmail() method");
         
@@ -115,6 +115,59 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     }
     
     @org.junit.Test
+    public void loadSignIn_UsingMyEmail_UserProfile_Logout() throws Exception {
+        System.out.println("\nCalled loadSignIn_UsingMyEmail_UserProfile_Logout() method");
+        
+        try{
+        	Thread.sleep(5000);
+        	
+	        // Check whether is first time or not?
+	        boolean isFirst = checkGetStarted();
+	        
+	        if(isFirst)
+	        {
+	        	// New user or existing user?
+	        	// If click on "EXISTING USER"
+	        	MobileElement me = findButton("EXISTING USER");
+	        	if (me != null)
+	        	{
+	        		me.click();
+	        		Thread.sleep(3000);
+	        	
+	        		signIn();
+	        		
+	        		homeScreen();
+	        		
+	        		// Update user profile
+	        		updateUserProfile();
+	        		
+	        		// Logout
+	        		logout();
+	        		
+	        	} else
+	        		System.out.println("Not found: EXISTING USER button");
+	        } else
+	        {
+	        	homeScreen();
+	        	
+	        	// Update user profile
+        		updateUserProfile();
+	        	
+        		// Logout
+        		logout();
+	        }
+        	
+        }catch(Exception e)
+        {
+        	System.out.println("Error: " + e.getMessage());
+        	//throw e;
+        }
+        
+        Thread.sleep(3000);
+        System.out.println("Ended loadSignIn_UsingMyEmail_UserProfile_Logout() method.");
+    }
+    
+    //@org.junit.Test
     public void loadSignUp_UsingMyEmail_StartWithAPhoto() throws Exception {
         System.out.println("\nloadSignUp() method called");
         
@@ -131,13 +184,24 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	        	MobileElement me = findButton("NEW USER");
 	        	if (me != null)
 	        	{
-	        		me.click();
-	        		
+	        		me.click();	        		
 	        		Thread.sleep(3000);
 	        	
 	        		signUp();
 	        		
-	        		signUp_StartWithAPhoto();
+	        		// Welcome aboard screen, after sign up
+	            	// Find button: TELL A STORY
+	            	MobileElement btn = findButton("TELL A STORY");
+	            	if(btn == null)
+	            	{
+	            		System.out.println("Not found button: TELL A STORY");
+	            		return;
+	            	}
+	            	
+	            	btn.click();
+	            	
+	        		// Tell a story - Create a photo
+	        		startWithAPhoto();
 	        		
 	        		homeScreen();
 	        	} else
@@ -174,13 +238,24 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	        	MobileElement me = findButton("NEW USER");
 	        	if (me != null)
 	        	{
-	        		me.click();
-	        		
+	        		me.click();	        		
 	        		Thread.sleep(3000);
 	        	
 	        		signUp();
 	        		
-	        		signUp_StartWithYourVoice();
+	        		// Welcome aboard screen, after sign up
+	            	// Find button: TELL A STORY
+	            	MobileElement btn = findButton("TELL A STORY");
+	            	if(btn == null)
+	            	{
+	            		System.out.println("Not found button: TELL A STORY");
+	            		return;
+	            	}
+	            	
+	            	btn.click();
+	            	
+	        		
+	        		startWithYourVoice();
 	        		
 	        		homeScreen();
 	        	} else
@@ -201,7 +276,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     }
     
     private boolean checkGetStarted() throws Exception {
-    	System.out.println("Called checkGetStarted() method");
+    	System.out.println("\nCalled checkGetStarted() method");
     	
     	try
     	{
@@ -223,7 +298,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     }
     
     private void signUp() throws Exception {
-    	System.out.println("Called signUp() method");
+    	System.out.println("\nCalled signUp() method");
     	
     	// Test data
     	String email = "";
@@ -360,19 +435,8 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	System.out.println("Ended signUp() method");
     }
     
-    private void signUp_StartWithAPhoto() throws Exception {
-    	System.out.println("Called signUp_StartWithAPhoto() method");
-    	
-    	// Welcome aboard screen, after sign up
-    	// Find button: TELL A STORY
-    	MobileElement btn = findButton("TELL A STORY");
-    	if(btn == null)
-    	{
-    		System.out.println("Not found button: TELL A STORY");
-    		return;
-    	}
-    	
-    	btn.click();
+    private void startWithAPhoto() throws Exception {
+    	System.out.println("\nCalled startWithAPhoto() method");
     	
     	// Try to tap on forward arrow button 1, 2 or 3 times
     	int times = (int)(Math.random()*3);
@@ -387,7 +451,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	    }
     	
     	// Find button: Start with a photo
-    	btn = findButton("take photo btn");
+    	MobileElement btn = findButton("take photo btn");
     	if(btn == null)
     	{
     		System.out.println("Not found button: START WITH A PHOTO");
@@ -501,22 +565,11 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	if(btn != null)
     		btn.click();
     	
-    	System.out.println("Ended signUp_StartWithAPhoto() method");
+    	System.out.println("Ended startWithAPhoto() method");
     }
     
-    private void signUp_StartWithYourVoice() throws Exception {
-    	System.out.println("Called signUp_StartWithYourVoice() method");
-    	
-    	// Welcome aboard screen, after sign up
-    	// Find button: TELL A STORY
-    	MobileElement btn = findButton("TELL A STORY");
-    	if(btn == null)
-    	{
-    		System.out.println("Not found button: TELL A STORY");
-    		return;
-    	}
-    	
-    	btn.click();
+    private void startWithYourVoice() throws Exception {
+    	System.out.println("\nCalled startWithYourVoice() method");
     	
     	// Try to tap on forward arrow button 1, 2 or 3 times
     	int times = (int)(Math.random()*3);
@@ -531,7 +584,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	    }
     	
     	// Find button: Start with your voice
-    	btn = findButton("take record btn");
+    	MobileElement btn = findButton("take record btn");
     	if(btn == null)
     	{
     		System.out.println("Not found button: START WITH YOUR VOICE");
@@ -608,26 +661,18 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	if(btn != null)
     		btn.click();
     	
-    	System.out.println("Ended signUp_StartWithYourVoice() method");
+    	System.out.println("Ended startWithYourVoice() method");
     }
     
     private void afterSignIn_TellANewStory() throws Exception {
-    	System.out.println("Called afterSignIn_TellANewStory() method");
+    	System.out.println("\nCalled afterSignIn_TellANewStory() method");
     	
-    	// Get UIACollectionView control
-    	MobileElement me = element(for_tags("UIACollectionView"));
-    	System.out.println("Find UIACollectionView control: " + me);
-    	if(me == null)
-    		return;
+    	// Tap on "TELL A NEW STORY"
     	
     	try
-    	{
-    		System.out.println("Scroll to: TELL A NEW STORY button");
-	    	//WebElement btn = me.findElementByClassName("UIAButton");
-	    	//WebElement btn = me.findElementByTagName("UIAButton");
-    		WebElement btn = scrollTo("TELL A NEW STORY");
-	    	 
-	    	System.out.println("The TELL A NEW STORY button?: " + btn);
+    	{	
+    		MobileElement btn = findButton("TELL A NEW STORY");
+	    	
 	    	if(btn == null)
 	    		return;
 	    	
@@ -636,18 +681,11 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     		
     	}catch(Exception e)
     	{
-    		//System.out.println("Error: " + e);
+    		System.out.println("Error: " + e);
     	}
     	
-    	// Tap on "TELL A NEW STORY" button
-    	System.out.println("Tap on: TELL A NEW STORY");
-    	//text("TELL A NEW STORY").click();
-    	
-    	MobileElement btn = findButton("TELL A NEW STORY");
-    	if(btn == null)
-    		return;
-    	
-    	btn.click();
+    	// Tell a story - Create a photo
+		startWithAPhoto();
     	
     	System.out.println("Ended afterSignIn_TellANewStory() method");
     }
@@ -655,7 +693,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     
     
     private boolean signIn() throws Exception {
-    	System.out.println("Called signIn() method");
+    	System.out.println("\nCalled signIn() method");
     	
     	// Set email
     	String email = "thanhdinh73@yahoo.com";
@@ -688,8 +726,47 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	return true;
     }
     
+    private void logout() throws Exception {
+    	System.out.println("\nCalled logout() method");
+    	
+    	// Old way (the user profile did not have a name): Find user profile button
+    	/*System.out.println("Finding user profile button.");
+    	Thread.sleep(2000);
+    	for (MobileElement me : tags("UIAButton")) {
+    		System.out.println("Button: " + me.getText());
+    		System.out.println("\tTagname: " + me.getTagName());
+    		
+  		  if(me.getText().equals("Back"))
+        		continue;
+  		  
+  		  me.click();
+  		  break;
+  	  	}*/
+    	
+    	// Find user profile button
+    	MobileElement meBtn = findButton("UserPrifleButton");
+    	if(meBtn == null)
+    	{
+    		System.out.println("Cannot open user profile screen!");
+    		return;
+    	}
+    	meBtn.click();
+    	
+    	// Tap on logout link
+    	MobileElement meLogout = text("logout");
+    	if(meLogout != null)
+    	{
+    		System.out.println("Found logout link");
+    		meLogout.click();
+    	} else
+    		System.out.println("Not found logout link");
+    	
+    	Thread.sleep(3000);
+    	System.out.println("Ended logout() method");
+    }
+    
     private boolean signIn_UsingFacebook() throws Exception {
-    	System.out.println("Called signIn_UsingFacebook() method");
+    	System.out.println("\nCalled signIn_UsingFacebook() method");
     	
     	// Set email
     	/*String email = "thanhdinh73@yahoo.com";
@@ -723,7 +800,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     }
     
     private void homeScreen() throws Exception {
-    	System.out.println("Called homeScreen() method");
+    	System.out.println("\nCalled homeScreen() method");
     	
     	// Click on "FAMILY STORIES"
     	System.out.println("Tap on: FAMILY STORIES");
@@ -732,7 +809,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	
     	// Click on "FAMILY"
     	System.out.println("Tap on: FAMILY");
-    	//text("FAMILY").click(); // From Dec 03, 2015 - it did not work b/c there are many Family word in this screen.
+    	//text("FAMILY").click(); // From Dec 03, 2015 - it did not work b/c there are many Family words in this screen.
     	for (MobileElement me : tags("UIAStaticText"))
   	  	{
     		System.out.println("Finding: " + me.getText());
@@ -756,7 +833,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     }
     
     private void homeScreen_FamilyTab() throws Exception {
-    	System.out.println("Called homeScreen_FamilyTab() method");
+    	System.out.println("\nCalled homeScreen_FamilyTab() method");
     	
     	String searchFor = "Thanh Dinh";
     	
@@ -774,35 +851,136 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	
     	meBtn.click();
     	
-    	// No results?
-    	System.out.println("Finding: No results?");
-    	MobileElement meNoResults = text("No results");
-    	if(meNoResults != null)
+    	System.out.println("Check search results");
+    	boolean isHasResults = false;
+    	
+		// Try to select some people if search found
+    	try
     	{
-    		System.out.println("Tap on Back button");
-    		
-    		// Tap on Back button
-    		back();
-    	}else
+			for (MobileElement me : tags("UIATableCell"))
+	  	  	{
+				isHasResults = true;
+	    		System.out.println("Table Cell: " + me.getText());
+	    		
+	    		// Random to select
+	    		int rand = (int)(Math.random()*9999);
+	    		if(rand %2 == 0)
+	    		{
+	  		  		me.click();
+	  		  		Thread.sleep(3000);
+	    		}
+	  	  	}
+    	}catch(Exception ex)
     	{
-    		// Try to select all people if search found
-    		for (MobileElement me : tags("UIATableCell"))
-      	  	{
-        		System.out.println("Table Cell: " + me.getText());
-      		  	me.click();
-      	  	}
-    		
-    		// After selected some people, tap on DONE button
-    		MobileElement meDoneBtn = findButton("DONE");
-    		if(meDoneBtn != null)
-    			meDoneBtn.click();
-    		
-    		// Tap on "INVITE THEM BY EMAIL"
-    		MobileElement meInviteBtn = findButton("INVITE THEM BY EMAIL");
-    		if(meInviteBtn != null)
-    			meInviteBtn.click();
+    		System.out.println("Error: " + ex.getMessage());
     	}
+    		
+		if(isHasResults)
+		{
+    		// After selected some people, tap on DONE button
+    		//MobileElement meDoneBtn = findButton("DONE");
+			WebElement meDoneBtn = findButtonWE("DONE");
+    		if(meDoneBtn != null)
+    		{
+    			try
+    			{
+    				System.out.println("DONE button, get enabled attribute: " + meDoneBtn.getAttribute("enabled"));
+    				if(meDoneBtn.getAttribute("enabled").equals("true"))	
+    					meDoneBtn.click();
+    				else
+    					back();
+    			}catch(Exception ex)
+    			{
+    				// In case, Appium is not supported to get attribute
+    				meDoneBtn.click();
+    				
+    				// Find DONE button again, if it is not enabled
+    				meDoneBtn = findButtonWE("DONE");
+    				if(meDoneBtn != null)
+    					back();
+    			}
+    				
+    		} else
+    			back();
+		} else
+		{	
+    		// No results?
+        	System.out.println("Finding: No results");
+        	MobileElement meNoResults = text("No results");
+        	if(meNoResults != null)
+        	{
+        		System.out.println("Tap on Back button");
+        		
+        		// Tap on Back button
+        		back();
+        	}
+		}
+		
+    	// Tap on "INVITE THEM BY EMAIL"
+    	/*MobileElement meInviteBtn = findButton("INVITE THEM BY EMAIL");
+    	if(meInviteBtn != null)
+    		meInviteBtn.click();*/
     	
     	System.out.println("Ended homeScreen_FamilyTab() method");
+    }
+    
+    private void updateUserProfile() throws Exception {
+    	System.out.println("\nCalled updateUserProfile() method");
+    	
+    	// Find user profile button
+    	MobileElement meBtn = findButton("UserPrifleButton");
+    	if(meBtn == null)
+    	{
+    		System.out.println("Cannot open user profile screen!");
+    		return;
+    	}
+    	meBtn.click();
+    	
+    	// Tap on Edit button to change to update mode
+    	meBtn = findButton("Edit");
+    	if(meBtn == null)
+    	{
+    		back();
+    		return;
+    	}
+    	meBtn.click();
+    	
+    	// B/c of UIATextFields don't have name, I have to loop through them
+    	int idx = 0;
+    	for (MobileElement me : tags("UIATextField"))
+  	  	{
+    		idx++;
+    		
+    		System.out.println("Text field: " + me.getText());
+    		
+    		// Update first name
+    		if(idx == 1)
+    		{
+    			me.setValue(String.format(FIRSTNAME_FORMAT, RANDOM_NUM));
+    		} else if(idx == 2) // Update last name
+    		{
+    			me.setValue(String.format(LASTNAME_FORMAT, RANDOM_NUM));
+    		} else // Update DoB
+    		{
+    			me.setValue(RANDOM_NUM + "");
+    			break;
+    		}
+  	  	}
+    	
+    	// Tap on SAVE button
+    	MobileElement meBtnSave = findButton("Save");
+    	if(meBtnSave != null)
+    	{	 
+    		meBtnSave.click();
+    		
+    		// Wait for alert is disappeared
+    		Thread.sleep(4000);
+    	}
+    	
+    	// Tap on Back button
+    	back();
+    	
+    	Thread.sleep(3000);
+    	System.out.println("Ended updateUserProfile() method");
     }
 }

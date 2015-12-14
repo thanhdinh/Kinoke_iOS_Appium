@@ -123,6 +123,25 @@ public abstract class Helpers {
   }
   
   /**
+   * Find a button by its name.
+   */
+  public static WebElement findButtonWE(String name)
+  {
+	  System.out.println("Find button: " + name);
+	  
+	  for (WebElement me : tagsWE("UIAButton")) {
+		  if(me.getText() == null || !me.getText().equals(name))
+      		continue;
+      	
+		  System.out.println("Found button: " + name);
+      		return me;
+	  }
+	  
+	  System.out.println("Not found button: " + name);
+	  return null;
+  }
+  
+  /**
    * Find the first TextField.
    */
   public static MobileElement findTextField()
