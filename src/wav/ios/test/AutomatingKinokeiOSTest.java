@@ -66,7 +66,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingMyEmail() method.");
     }
     
-    //@org.junit.Test
+    @org.junit.Test
     public void loadSignIn_UsingFacebook() throws Exception {
         System.out.println("\nCalled loadSignIn_UsingFacebook() method");
         
@@ -89,19 +89,18 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	        	
 	        		signIn_UsingFacebook();
 	        		
-	        		homeScreen();
-	        		
 	        		// Create a new story
 	        		afterSignIn_TellANewStory();
+	        		
+	        		homeScreen();
 	        	} else
 	        		System.out.println("Not found: EXISTING USER button");
 	        } else
-	        {
-	        	homeScreen();
-	        	
+	        {	
 	        	// Create a new story
         		afterSignIn_TellANewStory();
-	        	
+	        
+        		homeScreen();
 	        }
         	
         }catch(Exception e)
@@ -114,7 +113,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingFacebook() method.");
     }
     
-    @org.junit.Test
+    //@org.junit.Test
     public void loadSignIn_UsingMyEmail_UserProfile_Logout() throws Exception {
         System.out.println("\nCalled loadSignIn_UsingMyEmail_UserProfile_Logout() method");
         
@@ -771,8 +770,15 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     private boolean signIn_UsingFacebook() throws Exception {
     	System.out.println("\nCalled signIn_UsingFacebook() method");
     	
+    	// Tap on "LOGIN WITH FACEBOOK" button
+    	MobileElement btn = findButton("LOGIN WITH FACEBOOK");
+    	if(btn == null)
+    		return false;
+    	
+    	btn.click();
+    	
     	// Set email
-    	/*String email = "thanhdinh73@yahoo.com";
+    	String email = "testnas90@yahoo.com";
     	System.out.println("Set email: " + email);
     	MobileElement me = findTextField();
     	if(me != null)
@@ -780,21 +786,42 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	else
     		return false;
     	
-    	// Set PIN
-    	String pin = "123456";
-		System.out.println("Set PIN: " + pin);
+    	// Set Password
+    	String pw = "Personal123";
+		System.out.println("Set Password: " + pw);
     	me = element(for_tags("UIASecureTextField"));
     	if(me != null)
-    		me.setValue(pin);
+    		me.setValue(pw);
     	else
     		return false;
     	
     	// Click Login button
-    	me = findButton("LOGIN");
-    	if(me != null)
-    		me. click();
-    	else
-    		return false;*/
+    	// If the FaceBook page is using VNese?
+    	try
+    	{
+    		btn = findButton("Đăng nhập");
+    	}catch(Exception e)
+    	{
+    		
+    	}
+    	
+    	if(btn == null)
+    	{
+    		// Try to find in EN
+    		btn = findButton("Log In");
+    	}
+    	
+    	if(btn == null)
+    		return false;
+    	
+    	btn.click();
+    	
+    	// If login successfully, find OK button to confirm
+    	btn = findButton("OK");
+    	if(btn == null)
+    		return false;
+    	
+    	btn.click();
     	
     	Thread.sleep(2000);
     	System.out.println("Ended signIn_UsingFacebook() method");
