@@ -84,7 +84,8 @@ public class AppiumTest implements SauceOnDemandSessionIdProvider {
         
         //capabilities.setCapability("platformVersion", "7.1");
         //capabilities.setCapability("platformVersion", "8.3");
-        capabilities.setCapability("platformVersion", "9.1");
+        //capabilities.setCapability("platformVersion", "9.1");
+        capabilities.setCapability("platformVersion", "9.2");
         
         capabilities.setCapability("platformName", "ios");
         

@@ -551,16 +551,19 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	
     	//
     	// Categorize your story: Happy, Celebrations, Origins and Graduations
+    	// Dec 15, 2015: New categories are Funny, Origins, Occasion, Life Lesson and Career
     	Thread.sleep(2000);
-    	int category = (int)(Math.random()*4);
+    	int category = (int)(Math.random()*5);
     	if(category <= 1)
-    		btn = findButton("HAPPY");
+    		btn = findButton("FUNNY");
     	else if(category == 2)
-    		btn = findButton("CELEBRATIONS");
+    		btn = findButton("ORIGINS");
     	else if(category == 3)
-    		btn = findButton("ORIGINS");
+    		btn = findButton("OCCASION");
+    	else if(category == 4)
+    		btn = findButton("LIFE LESSON");
     	else
-    		btn = findButton("ORIGINS");
+    		btn = findButton("CAREER");
     	
     	if(btn != null)
     		btn.click();
@@ -744,7 +747,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
   	  	}*/
     	
     	// Find user profile button
-    	MobileElement meBtn = findButton("UserPrifleButton");
+    	MobileElement meBtn = findButton("UserProfileButton");
     	if(meBtn == null)
     	{
     		System.out.println("Cannot open user profile screen!");
@@ -845,11 +848,11 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	meTextSearch.setValue(searchFor);
     	
     	// Tap on Search icon
-    	MobileElement meBtn = findButton("Button");
-    	if(meBtn == null)
+    	MobileElement btn = findButton("Button");
+    	if(btn == null)
     		return;
     	
-    	meBtn.click();
+    	btn.click();
     	
     	System.out.println("Check search results");
     	boolean isHasResults = false;
@@ -878,28 +881,40 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 		if(isHasResults)
 		{
     		// After selected some people, tap on DONE button
-    		//MobileElement meDoneBtn = findButton("DONE");
-			WebElement meDoneBtn = findButtonWE("DONE");
-    		if(meDoneBtn != null)
+    		//MobileElement btnDone = findButton("DONE");
+			WebElement btnDone = findButtonWE("DONE");
+    		if(btnDone != null)
     		{
+    			// Dec 15, 2015: The below lines of codes did not work
+    			/*
     			try
     			{
-    				System.out.println("DONE button, get enabled attribute: " + meDoneBtn.getAttribute("enabled"));
-    				if(meDoneBtn.getAttribute("enabled").equals("true"))	
-    					meDoneBtn.click();
+    				System.out.println("DONE button, get enabled attribute: " + btnDone.getAttribute("enabled"));
+    				if(btnDone.getAttribute("enabled").equals("true"))	
+    					btnDone.click();
     				else
     					back();
     			}catch(Exception ex)
     			{
     				// In case, Appium is not supported to get attribute
-    				meDoneBtn.click();
+    				btnDone.click();
     				
     				// Find DONE button again, if it is not enabled
-    				meDoneBtn = findButtonWE("DONE");
-    				if(meDoneBtn != null)
+    				btnDone = findButtonWE("DONE");
+    				if(btnDone != null)
     					back();
     			}
+    			*/
+    			btnDone.click();
+    			
+    			// In case the DONE button is disabled, tap on Back button
+    			try
+    			{
+    				back();
+    			}catch(Exception e)
+    			{
     				
+    			}
     		} else
     			back();
 		} else
@@ -928,22 +943,22 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	System.out.println("\nCalled updateUserProfile() method");
     	
     	// Find user profile button
-    	MobileElement meBtn = findButton("UserPrifleButton");
-    	if(meBtn == null)
+    	MobileElement btn = findButton("UserProfileButton");
+    	if(btn == null)
     	{
     		System.out.println("Cannot open user profile screen!");
     		return;
     	}
-    	meBtn.click();
+    	btn.click();
     	
     	// Tap on Edit button to change to update mode
-    	meBtn = findButton("Edit");
-    	if(meBtn == null)
+    	btn = findButton("Edit");
+    	if(btn == null)
     	{
     		back();
     		return;
     	}
-    	meBtn.click();
+    	btn.click();
     	
     	// B/c of UIATextFields don't have name, I have to loop through them
     	int idx = 0;
@@ -968,17 +983,21 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
   	  	}
     	
     	// Tap on SAVE button
-    	MobileElement meBtnSave = findButton("Save");
-    	if(meBtnSave != null)
+    	MobileElement btnSave = findButton("Save");
+    	if(btnSave != null)
     	{	 
-    		meBtnSave.click();
+    		btnSave.click();
     		
     		// Wait for alert is disappeared
     		Thread.sleep(4000);
     	}
     	
+    	// Dec 15, 2015: Use Cancel button instead of Back one
     	// Tap on Back button
-    	back();
+    	//back();
+    	MobileElement btnCancel = findButton("Cancel");
+    	if(btnCancel != null)
+    		btnCancel.click();
     	
     	Thread.sleep(3000);
     	System.out.println("Ended updateUserProfile() method");
