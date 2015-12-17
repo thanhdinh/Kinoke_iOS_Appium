@@ -66,7 +66,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingMyEmail() method.");
     }
     
-    @org.junit.Test
+    //@org.junit.Test
     public void loadSignIn_UsingFacebook() throws Exception {
         System.out.println("\nCalled loadSignIn_UsingFacebook() method");
         
@@ -113,7 +113,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingFacebook() method.");
     }
     
-    //@org.junit.Test
+    @org.junit.Test
     public void loadSignIn_UsingMyEmail_UserProfile_Logout() throws Exception {
         System.out.println("\nCalled loadSignIn_UsingMyEmail_UserProfile_Logout() method");
         
@@ -135,8 +135,6 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	        	
 	        		signIn();
 	        		
-	        		homeScreen();
-	        		
 	        		// Update user profile
 	        		updateUserProfile();
 	        		
@@ -146,9 +144,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
 	        	} else
 	        		System.out.println("Not found: EXISTING USER button");
 	        } else
-	        {
-	        	homeScreen();
-	        	
+	        {	
 	        	// Update user profile
         		updateUserProfile();
 	        	
@@ -272,6 +268,55 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         
         Thread.sleep(3000);
         System.out.println("Ended loadSignUp() method.");
+    }
+    
+    //@org.junit.Test
+    public void loadSignIn_FamilyMembers() throws Exception {
+        System.out.println("\nCalled loadSignIn_FamilyMembers() method");
+        
+        try{
+        	Thread.sleep(5000);
+        	
+	        // Check whether is first time or not?
+	        boolean isFirst = checkGetStarted();
+	        
+	        if(isFirst)
+	        {
+	        	// New user or existing user?
+	        	// If click on "EXISTING USER"
+	        	MobileElement me = findButton("EXISTING USER");
+	        	if (me != null)
+	        	{
+	        		me.click();
+	        		Thread.sleep(3000);
+	        	
+	        		signIn();
+	        		
+	        		// Search and assign family members
+	        		homeScreen_FamilyTab();
+	        		
+	        		// Logout
+	        		logout();
+	        		
+	        	} else
+	        		System.out.println("Not found: EXISTING USER button");
+	        } else
+	        {
+	        	// Search and assign family members
+	        	homeScreen_FamilyTab();
+	        	
+        		// Logout
+        		logout();
+	        }
+        	
+        }catch(Exception e)
+        {
+        	System.out.println("Error: " + e.getMessage());
+        	//throw e;
+        }
+        
+        Thread.sleep(3000);
+        System.out.println("Ended loadSignIn_FamilyMembers() method.");
     }
     
     private boolean checkGetStarted() throws Exception {
@@ -837,7 +882,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	text("FAMILY STORIES").click();
     	Thread.sleep(3000);
     	
-    	// Click on "FAMILY"
+    	// Tap on "FAMILY" tab
     	System.out.println("Tap on: FAMILY");
     	//text("FAMILY").click(); // From Dec 03, 2015 - it did not work b/c there are many Family words in this screen.
     	for (MobileElement me : tags("UIAStaticText"))
@@ -850,8 +895,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
   		  	me.click();
   		  	
   		  	Thread.sleep(3000);
-  		  	homeScreen_FamilyTab();
-        	return;
+        	break;
   	  	}
     	
     	// Click on "MY STORIES"
@@ -866,6 +910,22 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	System.out.println("\nCalled homeScreen_FamilyTab() method");
     	
     	String searchFor = "Thanh Dinh";
+    	
+    	// Tap on "FAMILY" tab
+    	System.out.println("Tap on: FAMILY");
+    	//text("FAMILY").click(); // From Dec 03, 2015 - it did not work b/c there are many Family words in this screen.
+    	for (MobileElement me : tags("UIAStaticText"))
+  	  	{
+    		System.out.println("Finding: " + me.getText());
+    		if(!me.getText().equals("FAMILY"))
+    			continue;
+    		    		
+  		  	System.out.println("Found FAMILY tab.");
+  		  	me.click();
+  		  	
+  		  	Thread.sleep(3000);
+        	break;
+  	  	}
     	
     	// Set First name and last name to search textfield
     	MobileElement meTextSearch = findTextField();
@@ -978,6 +1038,9 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	}
     	btn.click();
     	
+    	// Update avatar
+    	updateAvatar();
+    	
     	// Tap on Edit button to change to update mode
     	btn = findButton("Edit");
     	if(btn == null)
@@ -1022,11 +1085,76 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	// Dec 15, 2015: Use Cancel button instead of Back one
     	// Tap on Back button
     	//back();
-    	MobileElement btnCancel = findButton("Cancel");
-    	if(btnCancel != null)
-    		btnCancel.click();
+    	// Dec 17, 2015: Use Close button instead of Cancel one
+    	MobileElement btnClose = findButton("Close");
+    	if(btnClose != null)
+    		btnClose.click();
     	
     	Thread.sleep(3000);
+    	System.out.println("Ended updateUserProfile() method");
+    }
+    
+    private void updateAvatar() throws Exception {
+    	System.out.println("\nCalled updateAvatar() method");
+    	
+    	boolean isFoundAvatar = false;
+    	
+    	// Tap on avatar image button?
+    	for (MobileElement me : tags("UIAImage")) {
+    		System.out.println("Find avatar: " + me);
+    		
+    		try
+    		{
+  		  		me.click();
+  		  		isFoundAvatar = true;
+  		  		
+  		  		break;
+    		}catch(Exception e)
+    		{
+    			// Maybe, it's not avatar image button or initial
+    			//System.out.println("Error: " + e);
+    		}
+  	  	}
+    	
+    	if(!isFoundAvatar)
+    	{
+    		System.out.println("Not found the avatar image button!");
+    		return;
+    	}
+    	
+    	// Take photo or choose from library
+    	MobileElement btn = findButton("Choose from library...");
+    	if (btn == null)
+    		return;
+    	
+    	btn.click();
+    	
+    	// Alert: Kinoke would like to access your photos
+    	// Tap on OK button
+    	Thread.sleep(3000);
+    	btn = findButton("OK");
+    	if (btn == null)
+    		return;
+    	
+    	btn.click();
+    	
+    	// Photos screen: Tap on Moments or Camera roll?
+    	text("Moments").click();
+    	
+    	// Photos -> Moments screen
+    	// Tap on the first photo
+    	List<MobileElement> lst = tags("UIACollectionCell");
+    	for(MobileElement me: lst)
+    	{
+    		System.out.println("Tap a photo: " + me);
+    		if(me != null)
+    		{
+    			me.click();
+    			break;
+    		}
+    	}
+    	
+    	
     	System.out.println("Ended updateUserProfile() method");
     }
 }
