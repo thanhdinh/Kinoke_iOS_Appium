@@ -97,7 +97,7 @@ public class AppiumTest implements SauceOnDemandSessionIdProvider {
         // Set job name on Sauce Labs
         capabilities.setCapability("name", "Kinoke for iOS " + date);
         String userDir = System.getProperty("user.dir");
-        String localApp = "Kinoke.app.zip";
+        String localApp = "Kinoke.app";
         if (runOnSauce) {
             String user = auth.getUsername();
             String key = auth.getAccessKey();

@@ -113,7 +113,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingFacebook() method.");
     }
     
-    //@org.junit.Test
+    @org.junit.Test
 	public void loadSignIn_UsingMyEmail_InviteUserByEmail() throws Exception {
         System.out.println("\nloadSignIn_UsingMyEmail_InviteUserByEmail() method called");
         
@@ -196,7 +196,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingMyEmail_InviteUserByEmail() method.");
     }
     
-	@org.junit.Test
+	//@org.junit.Test
 	public void loadSignIn_UsingMyEmail_DeleteMyStories() throws Exception {
         System.out.println("\nloadSignIn_UsingMyEmail_DeleteMyStories() method called");
         
@@ -1324,16 +1324,21 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	
     	Thread.sleep(2000);
     	
+    	// List of emails to invite.
+    	String[] arrEmails = {"thanhdinh73@yahoo.com", "testds20015@gmail.com"};
+    	
     	MobileElement meInputInviteEmail = element(for_tags("UIATextField"));
     	if(meInputInviteEmail != null)
     	{
-    		meInputInviteEmail.setValue("thanhdinh73@yahoo.com");
-    		//meInputInviteEmail.setValue("testds20015@gmail.com");
-    	}
+    		for(int i = 0; i < arrEmails.length; i++)
+    		{
+    			meInputInviteEmail.setValue(arrEmails[i]);
     	
-    	btn = findButton("return");
-    	if(btn != null)
-    		btn.click();
+    			btn = findButton("return");
+    			if(btn != null)
+    				btn.click();
+    		}
+    	}
     	
     	Thread.sleep(1000);
     	
@@ -1352,15 +1357,32 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     private void deleteMyStories() throws Exception {
     	System.out.println("\nCalled deleteMyStories() method");
     	
-    	//Find story by the categories or use element text("title of the story")
+    	// Find story by the categories or use element text("title of the story")
     	MobileElement meStories = element(for_tags("UIACollectionCell"));
-    	if(meStories.getAttribute("name").equals("OCCASION")){
-    		System.out.println("Found the story to delete");
-    		meStories.click();
+    	if(meStories == null)
+    	{
+    		System.out.println("Not found any stories to delete!");
+    		return;
     	}
-    	else{
-    		System.out.println("Not found the story");
-    	}
+    	
+    	if(meStories.getAttribute("name").equals("FUNNY"))
+            System.out.println("Found the story of Funny category to delete");
+        else
+            if(meStories.getAttribute("name").equals("ORIGINS"))
+            System.out.println("Found the story to delete");
+        else 
+            if(meStories.getAttribute("name").equals("OCCASION"))
+            System.out.println("Found the story to delete");
+        else
+            if(meStories.getAttribute("name").equals("LIFE LESSON"))
+            System.out.println("Found the story to delete");
+        else 
+            if(meStories.getAttribute("name").equals("CAREER"))
+            System.out.println("Found the story to delete");
+    	else
+    		System.out.println("Found the story of new category to delete!");
+    	
+    	meStories.click();
     	
     	Thread.sleep(1000);
     	MobileElement meButton = findButton("str moreButtonIcon");
