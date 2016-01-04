@@ -113,7 +113,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingFacebook() method.");
     }
     
-    @org.junit.Test
+    //@org.junit.Test
 	public void loadSignIn_UsingMyEmail_InviteUserByEmail() throws Exception {
         System.out.println("\nloadSignIn_UsingMyEmail_InviteUserByEmail() method called");
         
@@ -196,7 +196,7 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingMyEmail_InviteUserByEmail() method.");
     }
     
-	//@org.junit.Test
+	@org.junit.Test
 	public void loadSignIn_UsingMyEmail_DeleteMyStories() throws Exception {
         System.out.println("\nloadSignIn_UsingMyEmail_DeleteMyStories() method called");
         
@@ -1365,20 +1365,17 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     		return;
     	}
     	
+    	System.out.println("\nCategory: " + meStories.getAttribute("name"));
     	if(meStories.getAttribute("name").equals("FUNNY"))
             System.out.println("Found the story of Funny category to delete");
-        else
-            if(meStories.getAttribute("name").equals("ORIGINS"))
-            System.out.println("Found the story to delete");
-        else 
-            if(meStories.getAttribute("name").equals("OCCASION"))
-            System.out.println("Found the story to delete");
-        else
-            if(meStories.getAttribute("name").equals("LIFE LESSON"))
-            System.out.println("Found the story to delete");
-        else 
-            if(meStories.getAttribute("name").equals("CAREER"))
-            System.out.println("Found the story to delete");
+        else if(meStories.getAttribute("name").equals("ORIGINS"))
+            System.out.println("Found the story of ORIGINS category to delete");
+        else if(meStories.getAttribute("name").equals("OCCASION"))
+            System.out.println("Found the story of OCCASION category to delete");
+        else if(meStories.getAttribute("name").equals("LIFE LESSON"))
+            System.out.println("Found the story of LIFE LESSON category to delete");
+        else if(meStories.getAttribute("name").equals("CAREER"))
+            System.out.println("Found the story of CAREER category to delete");
     	else
     		System.out.println("Found the story of new category to delete!");
     	
@@ -1386,15 +1383,17 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	
     	Thread.sleep(1000);
     	MobileElement meButton = findButton("str moreButtonIcon");
-    	if(meButton!= null){
+    	if(meButton!= null)
     		meButton.click();
-    	}
+    	else
+    		return;
     	
     	MobileElement meDeleteStoryOpt = findButton("Delete story");
     	if(meDeleteStoryOpt!= null){
     		System.out.println("Found the delete story button");
     		meDeleteStoryOpt.click();
-    	}
+    	} else
+    		return;
     	
     	MobileElement meDeleteBtn = findButton("Delete");
     	if(meDeleteBtn!= null){
