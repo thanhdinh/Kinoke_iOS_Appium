@@ -247,9 +247,8 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
             System.out.println("The story doesn't delete yet");
             meStories.click();
         }
-        else{
+        else
             System.out.println("The story deleted successful");
-        }
         
         logout();
         Thread.sleep(2000);
