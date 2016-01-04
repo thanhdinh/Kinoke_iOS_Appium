@@ -113,7 +113,151 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
         System.out.println("Ended loadSignIn_UsingFacebook() method.");
     }
     
-    @org.junit.Test
+    //@org.junit.Test
+	public void loadSignIn_UsingMyEmail_InviteUserByEmail() throws Exception {
+        System.out.println("\nloadSignIn_UsingMyEmail_InviteUserByEmail() method called");
+        
+        try{
+            Thread.sleep(3000);
+            
+            // Check whether is first time or not?
+            boolean isFirst = checkGetStarted();
+            
+            if(isFirst)
+            {
+                // New user or existing user?
+                // If click on "NEW USER"
+                MobileElement me = findButton("EXISTING USER");
+                if (me != null)
+                {
+                    me.click();                 
+                    Thread.sleep(3000);
+                
+                    signIn();
+                    
+                    System.out.println("Tap on: FAMILY");
+                    //text("FAMILY").click(); // From Dec 03, 2015 - it did not work b/c there are many Family words in this screen.
+                    for (MobileElement meFamilyTab : tags("UIAStaticText"))
+                    {
+                        System.out.println("Finding: " + me.getText());
+                        if(!meFamilyTab.getText().equals("FAMILY"))
+                            continue;
+                                    
+                        System.out.println("Found FAMILY tab.");
+                        meFamilyTab.click();
+                        
+                        Thread.sleep(1000);
+                        homeScreen_FamilyTab_InviteEmail();
+                        
+                        logout();
+                        return;
+                    }
+                    
+                    
+                } else
+                    System.out.println("Not found: EXISTING USER button");
+            } else
+            {
+                MobileElement me = findButton("EXISTING USER");
+                if (me != null)
+                    me.click();
+                
+                System.out.println("Tap on: FAMILY");
+                
+                //text("FAMILY").click(); // From Dec 03, 2015 - it did not work b/c there are many Family words in this screen.
+                for (MobileElement meFamilyTab : tags("UIAStaticText"))
+                {
+                    System.out.println("Finding: ");
+                    if(!meFamilyTab.getText().equals("FAMILY"))
+                        continue;
+                                
+                    System.out.println("Found FAMILY tab.");
+                    meFamilyTab.click();
+                    
+                    Thread.sleep(1000);
+                    homeScreen_FamilyTab_InviteEmail();
+                    
+                    logout();
+                    
+                    return;
+                }
+                
+                homeScreen_FamilyTab_InviteEmail();
+                logout();
+            }
+            
+        }catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+            //throw e;
+        }
+        
+        Thread.sleep(2000);
+        System.out.println("Ended loadSignIn_UsingMyEmail_InviteUserByEmail() method.");
+    }
+    
+	@org.junit.Test
+	public void loadSignIn_UsingMyEmail_DeleteMyStories() throws Exception {
+        System.out.println("\nloadSignIn_UsingMyEmail_DeleteMyStories() method called");
+        
+        try{
+            Thread.sleep(2000);
+            
+            // Check whether is first time or not?
+            boolean isFirst = checkGetStarted();
+            
+            if(isFirst)
+            {
+                // New user or existing user?
+                // If click on "NEW USER"
+                MobileElement me = findButton("EXISTING USER");
+                if (me != null)
+                {
+                    me.click();                 
+                    Thread.sleep(1000);
+                    
+                    signIn();
+                    
+                    deleteMyStories();
+                }
+            }
+            else{
+                MobileElement me = findButton("EXISTING USER");
+                if (me != null)
+                {
+                    me.click();                    
+                    Thread.sleep(1000);
+                    
+                    signIn();
+                    
+                    deleteMyStories();
+                }
+            }
+        }catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+            //throw e;
+        }
+        
+        Thread.sleep(1000);
+        
+        //Verify the story should be deleted successful
+        MobileElement meStories = element(for_tags("UIACollectionCell"));
+        if(meStories.getAttribute("name").equals("OCCASION")){
+            System.out.println("The story doesn't delete yet");
+            meStories.click();
+        }
+        else{
+            System.out.println("The story deleted successful");
+        }
+        
+        logout();
+        Thread.sleep(2000);
+        
+        System.out.println("Ended loadSignIn_UsingMyEmail_DeleteMyStories() method.");
+    }
+	
+    //@org.junit.Test
     public void loadSignIn_UsingMyEmail_UserProfile_Logout() throws Exception {
         System.out.println("\nCalled loadSignIn_UsingMyEmail_UserProfile_Logout() method");
         
@@ -1157,4 +1301,85 @@ public class AutomatingKinokeiOSTest extends AppiumTest {
     	
     	System.out.println("Ended updateUserProfile() method");
     }
+    
+    private void homeScreen_FamilyTab_InviteEmail() throws Exception {
+    	System.out.println("\nCalled homeScreen_FamilyTab_InviteEmail() method");
+    	
+    	// Tap on "INVITE THEM BY EMAIL"
+    	//MobileElement btn = findButton("INVITE THEM BY EMAIL");
+    	MobileElement btn = text("Invite people via email");
+    	
+		if(btn!= null){
+			System.out.println("Found Invite people via email button");
+			btn.click();
+		}	
+    	else
+    	{
+    		System.out.println("Not found Invite people via email button");
+    		return;
+    	}
+    	    		
+    	btn = findButton("OK");
+    	if(btn != null)
+    		btn.click();
+    	
+    	Thread.sleep(2000);
+    	
+    	MobileElement meInputInviteEmail = element(for_tags("UIATextField"));
+    	if(meInputInviteEmail != null)
+    	{
+    		meInputInviteEmail.setValue("thanhdinh73@yahoo.com");
+    		//meInputInviteEmail.setValue("testds20015@gmail.com");
+    	}
+    	
+    	btn = findButton("return");
+    	if(btn != null)
+    		btn.click();
+    	
+    	Thread.sleep(1000);
+    	
+    	btn = findButton("Done");
+		if(btn != null)
+			btn.click();
+		else
+		{
+			btn = findButton("Cancel");
+			
+			if(btn != null)
+				btn.click();
+		}
+    }
+    
+    private void deleteMyStories() throws Exception {
+    	System.out.println("\nCalled deleteMyStories() method");
+    	
+    	//Find story by the categories or use element text("title of the story")
+    	MobileElement meStories = element(for_tags("UIACollectionCell"));
+    	if(meStories.getAttribute("name").equals("OCCASION")){
+    		System.out.println("Found the story to delete");
+    		meStories.click();
+    	}
+    	else{
+    		System.out.println("Not found the story");
+    	}
+    	
+    	Thread.sleep(1000);
+    	MobileElement meButton = findButton("str moreButtonIcon");
+    	if(meButton!= null){
+    		meButton.click();
+    	}
+    	
+    	MobileElement meDeleteStoryOpt = findButton("Delete story");
+    	if(meDeleteStoryOpt!= null){
+    		System.out.println("Found the delete story button");
+    		meDeleteStoryOpt.click();
+    	}
+    	
+    	MobileElement meDeleteBtn = findButton("Delete");
+    	if(meDeleteBtn!= null){
+    		System.out.println("Found the delete button in confirm popup");
+    		meDeleteBtn.click();
+    	}
+    }
+
 }
